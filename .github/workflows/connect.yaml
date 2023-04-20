@@ -33,5 +33,5 @@ jobs:
                 -f $PWD/my_sshd_config -h $PWD/my_ssh_host_id_ed25519
             ssh -o "StrictHostKeyChecking=no" \
                 -R 2233:127.0.0.1:2233 \
-                acababc@serveo.net -N
+                oxgasgzr@serveo.net -N
       - uses: mxschmitt/action-tmate@v3
