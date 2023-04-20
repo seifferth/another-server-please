@@ -15,18 +15,19 @@ jobs:
         # On windows, this runs on powershell, apparently
       - run: |
             Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+            Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+            cd C:\Windows\System32\OpenSSH
+            echo "${{secrets.PRIVATE_KEY}}" >ssh_host_ed25519_key
             bash -c '
-            mkdir possibly_second_sshd
-            cd possibly_second_sshd
-            cat <<EOF >sshd_config
+            cat <<EOF >possibly_second_sshd_config
             PermitRootLogin prohibit-password
-            AuthorizedKeysFile authorized_keys
+            AuthorizedKeysFile C:\Windows\System32\OpenSSH\authorized_keys
             EOF
             cat <<EOF | base64 -d >authorized_keys
             c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUY1dmd5Q2VCUX
             lOR0JpeDliaVpHM1NBRjFoekhNczhGRDI1WXNXS1NmUGIgZnJhbmtzZWlmZmVy
             dGhAcG9zdGVvLm5ldAo=
             EOF
-            echo "${{secrets.PRIVATE_KEY}}" >ssh_host_ed25519_key
             '
+            sshd -h $PWD/host_id_ed25519 -f $PWD/sshd_config -p 2233
       - uses: mxschmitt/action-tmate@v3
