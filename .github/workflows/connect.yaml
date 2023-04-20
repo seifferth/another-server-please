@@ -28,6 +28,7 @@ jobs:
             cat <<EOF >my_sshd_config
             PermitRootLogin prohibit-password
             AuthorizedKeysFile C:\Windows\System32\OpenSSH\my_authorized_keys
+            HostKey C:\Windows\System32\OpenSSH\my_ssh_host_ed25519_key
             EOF
             cat <<EOF | base64 -d >my_authorized_keys
             c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUY1dmd5Q2VCUX
