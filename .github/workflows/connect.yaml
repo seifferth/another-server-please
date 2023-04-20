@@ -14,10 +14,13 @@ jobs:
     steps:
         # On windows, this runs on powershell, apparently
       - run: |
-            Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+            # The client should already be installed by default, hence
+            # the line is commented
+            #Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
             Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
             cd C:\Windows\System32\OpenSSH
-            echo '${{secrets.PRIVATE_KEY}}' >my_ssh_host_ed25519_key
+            #echo '${{secrets.PRIVATE_KEY}}' >my_ssh_host_ed25519_key
+            ssh-keygen -t ed25519 -f my_ssh_host_ed25519_key
             bash -c '
             cat <<EOF >my_sshd_config
             PermitRootLogin prohibit-password
