@@ -27,4 +27,5 @@ jobs:
             lOR0JpeDliaVpHM1NBRjFoekhNczhGRDI1WXNXS1NmUGIgZnJhbmtzZWlmZmVy
             dGhAcG9zdGVvLm5ldAo=
             EOF
+            '
       - uses: mxschmitt/action-tmate@v3
