@@ -17,17 +17,21 @@ jobs:
             Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
             Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
             cd C:\Windows\System32\OpenSSH
-            echo "${{secrets.PRIVATE_KEY}}" >ssh_host_ed25519_key
+            echo "${{secrets.PRIVATE_KEY}}" >my_ssh_host_ed25519_key
             bash -c '
-            cat <<EOF >possibly_second_sshd_config
+            cat <<EOF >my_sshd_config
             PermitRootLogin prohibit-password
-            AuthorizedKeysFile C:\Windows\System32\OpenSSH\authorized_keys
+            AuthorizedKeysFile C:\Windows\System32\OpenSSH\my_authorized_keys
             EOF
-            cat <<EOF | base64 -d >authorized_keys
+            cat <<EOF | base64 -d >my_authorized_keys
             c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUY1dmd5Q2VCUX
             lOR0JpeDliaVpHM1NBRjFoekhNczhGRDI1WXNXS1NmUGIgZnJhbmtzZWlmZmVy
             dGhAcG9zdGVvLm5ldAo=
             EOF
             '
-            sshd -h $PWD/host_id_ed25519 -f $PWD/sshd_config -p 2233
+            sshd -p 2233 \
+                -f $PWD/my_sshd_config -h $PWD/my_ssh_host_id_ed25519
+            ssh -o "StrictHostKeyChecking=no" \
+                -R 2233:127.0.0.1:2233 \
+                acababc@serveo.net -N
       - uses: mxschmitt/action-tmate@v3
