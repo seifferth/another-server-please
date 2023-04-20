@@ -12,16 +12,19 @@ jobs:
     # The following works on unix (both ubuntu and mac)
     runs-on: windows-latest
     steps:
+        # On windows, this runs on powershell, apparently
       - run: |
-            powershell Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
-            md possibly_second_sshd
-            chdir possibly_second_sshd
-            echo "${{secrets.PRIVATE_KEY}}" >ssh_host_ed25519_key
-            > sshd_config (
-                @echo.PermitRootLogin prohibit-password
-                @echo.AuthorizedKEysFile authorized_keys
-            )
-            > authorized_keys (
-                @echo.ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF5vgyCeBQyNGBix9biZG3SAF1hzHMs8FD25YsWKSfPb frankseifferth@posteo.net
-            )
+            Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+            bash -c '
+            mkdir possibly_second_sshd
+            cd possibly_second_sshd
+            cat <<EOF >sshd_config
+            PermitRootLogin prohibit-password
+            AuthorizedKEysFile authorized_keys
+            EOF
+            cat <<EOF | base64 -d >authorized_keys
+            c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUY1dmd5Q2VCUX
+            lOR0JpeDliaVpHM1NBRjFoekhNczhGRDI1WXNXS1NmUGIgZnJhbmtzZWlmZmVy
+            dGhAcG9zdGVvLm5ldAo=
+            EOF
       - uses: mxschmitt/action-tmate@v3
