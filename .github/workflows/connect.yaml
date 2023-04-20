@@ -1,0 +1,14 @@
+on: [push]
+jobs:
+  connect:
+    # macos-latest
+    # ubuntu-latest
+    # windows-2022
+    # windows-2019
+    # For more see
+    # <https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners>
+    #
+    # The following works on unix (both ubuntu and mac)
+    runs-on: windows-latest
+    steps:
+      - uses: mxschmitt/action-tmate@v3
